@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works - Admission Predictor</title>
+    <style>
+        :root {
+            --primary-color: #FFD6BA;
+            --secondary-color: #FFB5A7;
+            --text-color: #2E4057;
+            --background-light: #FFF3E4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #F9F9F9;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Title Section */
+        .title-section {
+            width: 100%;
+            padding: 4rem 5% 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa, #dee2e6);
+            margin-top: 100px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .title-section h1 {
+            font-size: clamp(1.2rem, 4vw, 2.2rem);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Process Section */
+        .process-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .process-visualization {
+            position: relative;
+            width: 100%;
+            min-height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .process-circle {
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            position: relative;
+            margin: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .process-circle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 5px dashed var(--secondary-color);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .process-step {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+            z-index: 2;
+        }
+
+        .process-step:hover {
+            transform: scale(1.1) translateY(-5px);
+            background-color: var(--secondary-color);
+        }
+
+        .process-step-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .process-step img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        /* Positioning Small Circles Around the Main Circle */
+        .process-step:nth-child(1) { top: -75px; left: 50%; transform: translateX(-50%); }
+        .process-step:nth-child(2) { top: 15%; right: -75px; }
+        .process-step:nth-child(3) { bottom: 15%; right: -75px; }
+        .process-step:nth-child(4) { bottom: -75px; left: 50%; transform: translateX(-50%); }
+        .process-step:nth-child(5) { bottom: 15%; left: -75px; }
+        .process-step:nth-child(6) { top: 15%; left: -75px; }
+
+        /* SVG for Lines and Arrows */
+        .process-lines {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            z-index: 1;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--secondary-color);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: white;
+            font-size: clamp(0.8rem, 2vw, 1.1rem);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--secondary-color);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 1rem 0;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                transition: max-height 0.3s ease;
+                max-height: 0;
+                overflow: hidden;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+                max-height: 500px;
+            }
+
+            .navbar .nav-links li {
+                margin: 0.8rem 0;
+                text-align: center;
+            }
+
+            .navbar .nav-links a {
+                font-size: 1.2rem;
+                padding: 0.8rem;
+                display: block;
+            }
+
+            .title-section h1 {
+                font-size: clamp(1rem, 3vw, 1.5rem);
+            }
+
+            .process-circle, .process-lines {
+                width: 350px;
+                height: 350px;
+            }
+
+            .process-step {
+                width: 120px;
+                height: 120px;
+                font-size: 0.8rem;
+            }
+
+            .process-step img {
+                width: 90px;
+                height: 90px;
+                margin-bottom: 0.3rem;
+            }
+
+            /* Adjusted positioning for more spacing between Steps 2, 3, 4, and 5 */
+            .process-step:nth-child(1) { top: -60px; }
+            .process-step:nth-child(2) { top: 10%; right: -60px; } /* Increased gap from Step 1 */
+            .process-step:nth-child(3) { bottom: 10%; right: -60px; } /* Increased gap from Step 4 */
+            .process-step:nth-child(4) { bottom: -60px; }
+            .process-step:nth-child(5) { bottom: 10%; left: -60px; } /* Increased gap from Step 4 */
+            .process-step:nth-child(6) { top: 10%; left: -60px; } /* Increased gap from Step 1 */
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.8rem;
+            }
+
+            .title-section h1 {
+                font-size: clamp(1rem, 3vw, 1.5rem);
+            }
+
+            .process-step p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Admission Predictor</div>
+        <span class="menu-toggle">☰</span>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="HowItWorks.html">How It Works</a></li>
+            <li><a href="University.html">Universities</a></li>
+            <li><a href="technology.html">Technology Used</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Title Section -->
+    <section class="title-section">
+        <h1>How Our Prediction System Works</h1>
+    </section>
+
+    <!-- Process Visualization -->
+    <div class="process-container">
+        <div class="process-visualization">
+            <svg class="process-lines" viewBox="0 0 500 500">
+                <!-- Arrow Marker Definition -->
+                <defs>
+                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                        <path d="M0,0 L0,6 L9,3 z" fill="var(--secondary-color)" />
+                    </marker>
+                </defs>
+                <!-- Lines with Arrows -->
+                <!-- Step 1 (center top) to Step 2 (top right) -->
+                <line x1="250" y1="75" x2="375" y2="150" stroke="var(--secondary-color)" stroke-width="2" marker-end="url(#arrow)" />
+                <!-- Step 2 (top right) to Step 3 (bottom right) -->
+                <line x1="375" y1="150" x2="375" y2="350" stroke="var(--secondary-color)" stroke-width="2" marker-end="url(#arrow)" />
+                <!-- Step 3 (bottom right) to Step 4 (center bottom) -->
+                <line x1="375" y1="350" x2="250" y2="425" stroke="var(--secondary-color)" stroke-width="2" marker-end="url(#arrow)" />
+                <!-- Step 4 (center bottom) to Step 5 (bottom left) -->
+                <line x1="250" y1="425" x2="125" y2="350" stroke="var(--secondary-color)" stroke-width="2" marker-end="url(#arrow)" />
+                <!-- Step 5 (bottom left) to Step 6 (top left) -->
+                <line x1="125" y1="350" x2="125" y2="150" stroke="var(--secondary-color)" stroke-width="2" marker-end="url(#arrow)" />
+                <!-- Step 6 (top left) to Step 1 (center top) -->
+                <line x1="125" y1="150" x2="250" y2="75" stroke="var(--secondary-color)" stroke-width="2" marker-end="url(#arrow)" />
+            </svg>
+            <div class="process-circle">
+                <!-- Small Circles (Steps) -->
+                <div class="process-step">
+                    <div class="process-step-inner">
+                        <img src="https://img.favpng.com/11/8/9/data-collection-research-observation-data-set-png-favpng-2fNHeBhmJa2Aiw8EWxTX0c3u5.jpg" alt="Data Collection">
+                        <p>Step 1: Data Collection</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-inner">
+                        <img src="https://tse2.mm.bing.net/th?id=OIP.l-Vh6eEFIo44g8mMUSfLNgHaHa&pid=Api&P=0&h=180" alt="Data Cleaning">
+                        <p>Step 2: Data Cleaning</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-inner">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrxpfQjQ3dexCs68amToCDxthZmiC4t65o_w&s" alt="ML Model">
+                        <p>Step 3: ML Model</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-inner">
+                        <img src="https://img.icons8.com/?size=100&id=095b6dZPAc1F&format=png&color=000000" alt="Optimization">
+                        <p>Step 4: Optimization</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-inner">
+                        <img src="https://tse1.mm.bing.net/th?id=OIP.NPqSBI30oROTlDV-HZ-ACAHaEK&pid=Api&P=0&h=180" alt="Data Analysis">
+                        <p>Step 5: Data Analysis</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-inner">
+                        <img src="https://tse1.mm.bing.net/th?id=OIP.3QzuNj5M6AUbepT9ol95MQHaFC&pid=Api&P=0&h=180" alt="Production">
+                        <p>Step 6: Testing and Deployment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 Admission Insight. All Rights Reserved.</p>
+    </div>
+
+    <!-- JavaScript for Hamburger Menu -->
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinks.classList.toggle('active');
+            menuToggle.textContent = navLinks.classList.contains('active') ? '✖' : '☰';
+        });
+
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+
+        // Ensure menu closes when resizing to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+    </script>
+</body>
+</html>

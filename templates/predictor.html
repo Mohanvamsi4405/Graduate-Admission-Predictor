@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admission Predictor</title>
+  <style>
+    :root {
+      --primary-color: #FFD6BA;
+      --secondary-color: #FFB5A7;
+      --text-color: #2E4057;
+      --background-light: #FFF3E4;
+      --form-background: #F8F9FA;
+      --form-border: #FFB5A7;
+      --error-color: #ff4444;
+      --neon-color: #FF6F61;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #F9F9F9;
+      color: var(--text-color);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header/Navbar */
+    header {
+      background-color: var(--secondary-color);
+      padding: 1rem 2rem;
+      text-align: center;
+      color: white;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    header nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header nav ul {
+      list-style-type: none;
+      display: flex;
+    }
+
+    header nav ul li {
+      margin: 0 1rem;
+    }
+
+    header nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      padding: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    header nav ul li a:hover {
+      color: var(--primary-color);
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8rem;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    /* Form Section */
+    .predictor-form {
+      background-color: var(--form-background);
+      max-width: 1200px;
+      margin: 6rem auto 2rem;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .predictor-form h2 {
+      text-align: center;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      font-weight: bold;
+      background: linear-gradient(45deg, #FF4500, #FF8C00, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+    }
+
+    .input-group .field-info {
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+    .input-group .error-message {
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      color: var(--error-color);
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    .input-group.invalid input, .input-group.invalid select {
+      border-color: var(--error-color);
+    }
+
+    .input-group.invalid .error-message {
+      display: block;
+    }
+
+    button {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+      grid-column: span 2;
+    }
+
+    button:hover {
+      background-color: var(--primary-color);
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #result {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background-color: #e8f7ff;
+      border: 1px solid #b3d9ff;
+      border-radius: 5px;
+      color: #0056b3;
+      text-align: center;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      grid-column: span 2;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--secondary-color);
+      text-align: center;
+      padding: 1.5rem;
+      color: white;
+      margin-top: 2rem;
+    }
+
+    footer p {
+      font-size: clamp(0.8rem, 2vw, 1rem);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      header nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--secondary-color);
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 1rem 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      header nav ul.active {
+        display: flex;
+      }
+
+      header nav ul li {
+        margin: 0.8rem 0;
+        text-align: center;
+      }
+
+      header nav ul li a {
+        font-size: 1.2rem;
+        padding: 1rem;
+        display: block;
+      }
+
+      .predictor-form {
+        margin: 5rem 1rem 1rem;
+        padding: 1.5rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      button, #result {
+        grid-column: span 1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 0.8rem;
+      }
+
+      .predictor-form h2 {
+        font-size: clamp(1.2rem, 3vw, 1.5rem);
+      }
+
+      .input-group label {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+      }
+
+      .input-group input, .input-group select {
+        padding: 0.7rem;
+        font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+      }
+
+      .input-group .field-info, .input-group .error-message {
+        font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+      }
+
+      button {
+        padding: 0.8rem 1.5rem;
+        font-size: clamp(0.9rem, 2vw, 1rem);
+      }
+
+      #result {
+        font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header and Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Admission Predictor</div>
+      <span class="menu-toggle">☰</span>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="HowItWorks.html">How It Works</a></li>
+        <li><a href="University.html">Universities</a></li>
+        <li><a href="technology.html">Technology Used</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Form Section -->
+  <section class="predictor-form">
+    <h2>Enter Your Details for Prediction</h2>
+    <form id="predictionForm" action="/predict" method="POST">
+      <div class="form-grid">
+        <!-- GRE Score -->
+        <div class="input-group" id="gre-group">
+          <label for="gre_score">GRE Score:</label>
+          <input type="number" id="gre_score" name="gre_score" placeholder="Enter GRE score (260-340)" required step="any">
+          <div class="field-info">GRE scores range from 260 to 340.</div>
+          <div class="error-message">Please enter a valid GRE score (260-340).</div>
+        </div>
+
+        <!-- TOEFL Score -->
+        <div class="input-group" id="toefl-group">
+          <label for="toefl_score">TOEFL Score:</label>
+          <input type="number" id="toefl_score" name="toefl_score" placeholder="Enter TOEFL score (0-120)" required step="any">
+          <div class="field-info">TOEFL scores range from 0 to 120.</div>
+          <div class="error-message">Please enter a valid TOEFL score (0-120).</div>
+        </div>
+
+        <!-- University Rating -->
+        <div class="input-group" id="university-group">
+          <label for="university_rating">University Rating (1-5):</label>
+          <input type="number" id="university_rating" name="university_rating" min="1" max="5" placeholder="Rating from 1 to 5" required step="any">
+          <div class="field-info">Rate your university from 1 (lowest) to 5 (highest).</div>
+          <div class="error-message">Please enter a valid rating (1-5).</div>
+        </div>
+
+        <!-- SOP Strength -->
+        <div class="input-group" id="sop-group">
+          <label for="sop">SOP Strength (1-5):</label>
+          <input type="number" id="sop" name="sop" min="1" max="5" placeholder="Rating from 1 to 5" required step="any">
+          <div class="field-info">Rate your Statement of Purpose (SOP) from 1 to 5.</div>
+          <div class="error-message">Please enter a valid rating (1-5).</div>
+        </div>
+
+        <!-- LOR Strength -->
+        <div class="input-group" id="lor-group">
+          <label for="lor">LOR Strength (1-5):</label>
+          <input type="number" id="lor" name="lor" min="1" max="5" placeholder="Rating from 1 to 5" required step="any">
+          <div class="field-info">Rate your Letter of Recommendation (LOR) from 1 to 5.</div>
+          <div class="error-message">Please enter a valid rating (1-5).</div>
+        </div>
+
+        <!-- CGPA -->
+        <div class="input-group" id="cgpa-group">
+          <label for="cgpa">CGPA:</label>
+          <input type="number" id="cgpa" name="cgpa" step="0.01" placeholder="Enter CGPA" required>
+          <div class="field-info">Enter your Cumulative Grade Point Average (CGPA).</div>
+          <div class="error-message">Please enter a valid CGPA.</div>
+        </div>
+
+        <!-- Research Experience -->
+        <div class="input-group" id="research-group">
+          <label for="research">Research Experience:</label>
+          <select id="research" name="research">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+          <div class="field-info">Select "Yes" if you have research experience.</div>
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn">Predict My Chances</button>
+      <div id="result"></div>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Admission Insight. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const validationRules = {
+      gre_score: { min: 260, max: 340 },
+      toefl_score: { min: 0, max: 120 },
+      university_rating: { min: 1, max: 5 },
+      sop: { min: 1, max: 5 },
+      lor: { min: 1, max: 5 },
+      cgpa: { min: 0, max: 10 },
+    };
+
+    function validateInput(inputId, value) {
+      const rules = validationRules[inputId];
+      if (rules) {
+        const { min, max } = rules;
+        if (value < min || value > max || isNaN(value)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function handleInputChange(event) {
+      const input = event.target;
+      const inputId = input.id;
+      const inputGroup = input.closest('.input-group');
+      const value = parseFloat(input.value);
+
+      if (!validateInput(inputId, value)) {
+        inputGroup.classList.add('invalid');
+      } else {
+        inputGroup.classList.remove('invalid');
+      }
+      validateForm();
+    }
+
+    function validateForm() {
+      let isValid = true;
+      document.querySelectorAll('.input-group input').forEach(input => {
+        const value = parseFloat(input.value);
+        if (!validateInput(input.id, value)) {
+          isValid = false;
+        }
+      });
+      document.getElementById('submitBtn').disabled = !isValid;
+    }
+
+    document.querySelectorAll('.input-group input').forEach(input => {
+      input.addEventListener('input', handleInputChange);
+    });
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      menuToggle.textContent = navLinks.classList.contains('active') ? '✖' : '☰';
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        menuToggle.textContent = '☰';
+      }
+    });
+
+    validateForm();
+  </script>
+</body>
+</html>

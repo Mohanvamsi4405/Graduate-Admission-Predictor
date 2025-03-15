@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology Used - Admission Insight</title>
+    <style>
+        :root {
+            --primary-color: #FFD6BA;
+            --secondary-color: #FFB5A7;
+            --text-color: #2E4057;
+            --background-light: #FFF3E4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #F9F9F9;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Title Section */
+        .title-section {
+            width: 100%;
+            padding: 2rem 5%;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa, #dee2e6);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 100px; /* Adjusted to match other pages */
+        }
+
+        .title-section h1 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        /* Technology Section */
+        .technology-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: var(--background-light);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .technology-container h2 {
+            color: var(--text-color);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .technology-container p {
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Technology Cards */
+        .technology-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .technology-card {
+            background-color: var(--secondary-color);
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .technology-card:hover {
+            background-color: var(--primary-color);
+            transform: scale(1.03);
+        }
+
+        .technology-card img {
+            max-width: 80px;
+            margin-bottom: 1rem;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .technology-card h3 {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .technology-card p {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: white;
+            text-align: center;
+        }
+
+        /* Footer Section */
+        .footer {
+            background-color: var(--secondary-color);
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            color: white;
+            font-size: clamp(0.8rem, 2vw, 1.1rem);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .navbar .nav-links {
+                display: none; /* Hidden by default on mobile */
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--secondary-color);
+                position: absolute;
+                top: 100%; /* Below navbar, consistent with other pages */
+                left: 0;
+                padding: 1rem 0;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                transition: max-height 0.3s ease; /* Smooth transition */
+                max-height: 0; /* Collapsed initially */
+                overflow: hidden;
+            }
+
+            .navbar .nav-links.active {
+                display: flex; /* Show when active */
+                max-height: 500px; /* Increased to ensure all links are visible */
+            }
+
+            .navbar .nav-links li {
+                margin: 0.8rem 0; /* Adjusted to match other pages */
+                text-align: center;
+            }
+
+            .navbar .nav-links a {
+                font-size: 1.2rem;
+                padding: 0.8rem; /* Adjusted to match other pages */
+                display: block;
+            }
+
+            .title-section {
+                margin-top: 100px;
+                padding: 1.5rem 3%;
+            }
+
+            .technology-container {
+                padding: 1.5rem;
+            }
+
+            .technology-card {
+                max-width: 100%;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.8rem;
+            }
+
+            .title-section h1 {
+                font-size: clamp(1.2rem, 3vw, 1.5rem);
+            }
+
+            .technology-container h2 {
+                font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            }
+
+            .technology-container p {
+                font-size: clamp(0.9rem, 2vw, 1rem);
+            }
+
+            .technology-card {
+                padding: 1rem;
+            }
+
+            .technology-card img {
+                max-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Admission Predictor</div>
+        <span class="menu-toggle">☰</span>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="HowItWorks.html">How It Works</a></li>
+            <li><a href="University.html">Universities</a></li>
+            <li><a href="technology.html">Technology Used</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Title Section -->
+    <section class="title-section">
+        <h1>Technologies Used</h1>
+    </section>
+
+    <!-- Technology Section -->
+    <div class="technology-container">
+        <h2>Explore the Technologies Powering Our Project</h2>
+        <p>Our project leverages cutting-edge technologies to provide accurate predictions and an excellent user experience. Here's a breakdown of the core technologies used:</p>
+
+        <!-- Technology Cards -->
+        <div class="technology-cards">
+            <div class="technology-card">
+                <img src="https://superwise.ai/wp-content/uploads/2023/10/Prompt-engineering-1024x535.png" alt="Prompt Engineering" loading="lazy">
+                <h3>Prompt Engineering</h3>
+                <p>Our team developed this website using prompt engineering, incorporating dynamic features and interactive elements to enhance user experience.</p>
+            </div>
+
+            <div class="technology-card">
+                <img src="https://tse3.mm.bing.net/th?id=OIP.sM15X96wsM-Rxpym-TBzVAHaDV&pid=Api&P=0&h=180" alt="NumPy" loading="lazy">
+                <h3>NumPy</h3>
+                <p>NumPy is used for numerical computations, handling large arrays and matrices efficiently, a core aspect of our data analysis process.</p>
+            </div>
+
+            <div class="technology-card">
+                <img src="https://tse3.mm.bing.net/th?id=OIP.votd9ieCXZai8b2NXTQ3YQHaES&pid=Api&P=0&h=180" alt="Scikit-Learn" loading="lazy">
+                <h3>Scikit-Learn</h3>
+                <p>Scikit-learn is utilized for machine learning model development. It helps in training and evaluating the predictive models.</p>
+            </div>
+
+            <div class="technology-card">
+                <img src="https://tse3.mm.bing.net/th?id=OIP.sFTFoZqlSdH_LbbV_C3nMwHaED&pid=Api&P=0&h=180" alt="Pandas" loading="lazy">
+                <h3>Pandas</h3>
+                <p>Pandas is used for data manipulation and analysis, allowing us to clean, process, and analyze data efficiently.</p>
+            </div>
+
+            <div class="technology-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="Flask" loading="lazy">
+                <h3>Flask</h3>
+                <p>Flask is the web framework used for creating the backend API, allowing smooth interaction between the frontend and the predictive model.</p>
+            </div>
+
+            <div class="technology-card">
+                <img src="https://tse2.mm.bing.net/th?id=OIP.iBUXAQVDksw_zVcKLz876QHaDt&pid=Api&P=0&h=180" alt="Heroku" loading="lazy">
+                <h3>Cloud Deployment</h3>
+                <p>The website is hosted and deployed on the cloud, providing high availability and scalability for users.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>© 2025 Admission Insight. All Rights Reserved.</p>
+    </div>
+
+    <!-- JavaScript for Hamburger Menu -->
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinks.classList.toggle('active');
+            menuToggle.textContent = navLinks.classList.contains('active') ? '✖' : '☰';
+        });
+
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+
+        // Ensure menu closes when resizing to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+    </script>
+</body>
+</html>

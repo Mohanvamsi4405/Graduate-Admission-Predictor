@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Prediction</title>
+    <style>
+        :root {
+            --primary-color: #FFD6BA;
+            --secondary-color: #FFB5A7;
+            --text-color: #2E4057;
+            --background-light: #FFF3E4;
+            --glow-color: rgba(255, 111, 97, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #F9F9F9;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Title Section */
+        .title-section {
+            width: 100%;
+            padding: 1.5rem 5%;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa, #dee2e6);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 6rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.5s ease-out forwards;
+            z-index: 1;
+        }
+
+        .title-section h1 {
+            font-size: clamp(1.2rem, 4vw, 2.2rem);
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        /* Centered Animated Text */
+        .centered-text {
+            text-align: center;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: bold;
+            color: var(--text-color);
+            margin: 0.5rem 0;
+            animation: fadeInCenter 2s ease-out forwards;
+        }
+
+        /* Hero Section */
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            padding: 1rem;
+            margin-top: 5px;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 90%;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-text {
+            flex: 1;
+            padding: 1.5rem;
+            text-align: left;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .hero-text p {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text .cta-button {
+            background: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: background 0.3s ease;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .hero-text .cta-button:hover {
+            background: var(--primary-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            margin-top: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInCenter {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--secondary-color);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 1rem 0;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                transition: max-height 0.3s ease;
+                max-height: 0;
+                overflow: hidden;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+                max-height: 500px; /* Increased to ensure full visibility */
+            }
+
+            .navbar .nav-links li {
+                margin: 0.8rem 0;
+                text-align: center;
+            }
+
+            .navbar .nav-links a {
+                font-size: 1.2rem;
+                padding: 0.8rem;
+                display: block;
+            }
+
+            .title-section {
+                margin-top: 5.5rem;
+                padding: 1rem 3%;
+            }
+
+            .hero-container {
+                flex-direction: column;
+                min-height: auto;
+                padding: 0.5rem;
+            }
+
+            .hero-image, .hero-text {
+                flex: none;
+                width: 100%;
+                padding: 0.5rem;
+                text-align: center;
+            }
+
+            .hero-image img {
+                max-width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.8rem;
+            }
+
+            .title-section {
+                margin-top: 5rem;
+            }
+
+            .title-section h1 {
+                font-size: clamp(1rem, 3vw, 1.5rem);
+            }
+
+            .centered-text {
+                font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+            }
+
+            .hero-text h1 {
+                font-size: clamp(1.2rem, 4vw, 1.8rem);
+            }
+
+            .hero-text p {
+                font-size: clamp(0.9rem, 2vw, 1.1rem);
+            }
+
+            .hero-text .cta-button {
+                padding: 0.8rem 1.5rem;
+                font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Admission Predictor</div>
+        <span class="menu-toggle">☰</span>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="HowItWorks.html">How It Works</a></li>
+            <li><a href="University.html">Universities</a></li>
+            <li><a href="technology.html">Technology Used</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Title Section -->
+    <section class="title-section">
+        <h1>Admission Insight: Leveraging Machine Learning for Graduate Program Predictions</h1>
+    </section>
+
+    <!-- Centered Animated Text -->
+    <div class="centered-text">🚀 Unlock Your Future: AI-Powered Predictions for Your Dream Admission! 🎓</div>
+
+    <!-- Hero Section -->
+    <div class="hero-container">
+        <div class="hero-image">
+            <img src="https://wallpapercave.com/wp/wp2468653.jpg" alt="Hero Image" loading="lazy">
+        </div>
+        <div class="hero-text">
+            <h1>🎓 Admission Predictions Made Easy!</h1>
+            <p>Our intelligent system analyzes your academic profile and provides <strong>accurate, data-driven predictions</strong> to help you secure your dream university.</p>
+            <a href="predictor.html" class="cta-button">Check Your Chances</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 Admission Predictor. All Rights Reserved.
+    </footer>
+
+    <!-- JavaScript for Hamburger Menu and Dynamic Margin -->
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const navbar = document.querySelector('.navbar');
+        const titleSection = document.querySelector('.title-section');
+
+        // Dynamic margin adjustment
+        function adjustTitleMargin() {
+            const navbarHeight = navbar.offsetHeight;
+            titleSection.style.marginTop = `${navbarHeight + 20}px`; // 20px buffer
+        }
+
+        // Initial adjustment and on resize
+        window.addEventListener('load', adjustTitleMargin);
+        window.addEventListener('resize', adjustTitleMargin);
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinks.classList.toggle('active');
+            menuToggle.textContent = navLinks.classList.contains('active') ? '✖' : '☰';
+            adjustTitleMargin(); // Adjust margin when menu toggles
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+                adjustTitleMargin(); // Adjust margin when menu closes
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+    </script>
+</body>
+</html>

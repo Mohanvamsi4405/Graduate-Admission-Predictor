@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Prediction Results</title>
+    <style>
+        :root {
+            --primary-color: #FFD6BA;
+            --secondary-color: #FFB5A7;
+            --text-color: #2E4057;
+            --background-light: #FFF3E4;
+            --form-background: #F8F9FA;
+            --form-border: #FFB5A7;
+            --error-color: #ff4444;
+            --neon-color: #FF6F61;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #F9F9F9;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: clamp(1.2rem, 3vw, 1.8rem); /* Updated to match other pages */
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: clamp(0.9rem, 2vw, 1.2rem); /* Updated to match other pages */
+            padding: 0.5rem; /* Added for consistency */
+            transition: color 0.3s ease; /* Updated to match other pages */
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Results Section */
+        .results-container {
+            background-color: var(--form-background);
+            max-width: 1200px;
+            margin: 5rem auto 2rem; /* Adjusted to match navbar height */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .results-container h2 {
+            text-align: center;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .results-container h3 {
+            text-align: center;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            margin-top: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .results-container p {
+            font-size: clamp(0.9rem, 3vw, 1.5rem);
+            text-align: center;
+            color: var(--text-color);
+            margin-top: 1rem;
+        }
+
+        .results-container ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+
+        .results-container ul li {
+            background-color: var(--background-light);
+            margin: 0.8rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid var(--form-border);
+            font-size: clamp(0.8rem, 2.5vw, 1.2rem);
+            animation: slideUp 0.5s ease-in-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            text-align: center;
+            padding: 1rem;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            font-size: clamp(0.7rem, 2vw, 1rem);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .navbar .nav-links {
+                display: none; /* Hidden by default on mobile */
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--secondary-color);
+                position: absolute;
+                top: 100%; /* Below navbar, consistent with other pages */
+                left: 0;
+                padding: 1rem 0;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                transition: max-height 0.3s ease; /* Smooth transition */
+                max-height: 0; /* Collapsed initially */
+                overflow: hidden;
+            }
+
+            .navbar .nav-links.active {
+                display: flex; /* Show when active */
+                max-height: 500px; /* Increased to ensure all links are visible */
+            }
+
+            .navbar .nav-links li {
+                margin: 0.8rem 0; /* Adjusted to match other pages */
+                text-align: center;
+            }
+
+            .navbar .nav-links a {
+                font-size: 1.2rem; /* Adjusted to match other pages */
+                padding: 0.8rem; /* Adjusted to match other pages */
+                display: block;
+            }
+
+            .results-container {
+                margin: 5rem 1rem 1rem;
+                padding: 1.5rem;
+                animation: none; /* Remove float animation on mobile */
+            }
+
+            .results-container ul li {
+                padding: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.8rem; /* Adjusted to match other pages */
+            }
+
+            .results-container h2 {
+                font-size: clamp(1.1rem, 3vw, 1.5rem); /* Adjusted for consistency */
+            }
+
+            .results-container h3 {
+                font-size: clamp(0.9rem, 2.5vw, 1.2rem); /* Adjusted for consistency */
+            }
+
+            .results-container p {
+                font-size: clamp(0.8rem, 2vw, 1rem); /* Adjusted for consistency */
+            }
+
+            .results-container ul li {
+                font-size: clamp(0.7rem, 2vw, 0.9rem); /* Adjusted for consistency */
+                padding: 0.6rem;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Admission Predictor</div>
+        <span class="menu-toggle">☰</span>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="HowItWorks.html">How It Works</a></li>
+            <li><a href="University.html">Universities</a></li>
+            <li><a href="technology.html">Technology Used</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Results Section -->
+    <section class="results-container">
+        <h2>Admission Prediction Results</h2>
+        <p>Your chance for admission is <strong>{{ prediction }}%</strong>.</p>
+
+        <!-- University Recommendations -->
+        {% if recommendations %}
+            <h3>Recommended Universities:</h3>
+            <ul>
+                {% for university in recommendations %}
+                    <li>{{ university }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Admission Insight. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Hamburger Menu -->
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinks.classList.toggle('active');
+            menuToggle.textContent = navLinks.classList.contains('active') ? '✖' : '☰';
+        });
+
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+
+        // Ensure menu closes when resizing to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+    </script>
+</body>
+</html>
